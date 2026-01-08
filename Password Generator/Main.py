@@ -29,49 +29,30 @@ syms = get_nonneg_int("Enter the number of symbols you want in your password: ")
 lengthDone = 0
 password = []
 
-try:
-    print("Generating password...", end="", flush=True)
+if nums + syms + upps > length:
+    excess = nums + syms + upps - length
+    while excess > 0 and upps > 0:
+        upps -= 1
+        excess -= 1
+    while excess > 0 and syms > 0:
+        syms -= 1
+        excess -= 1
+    while excess > 0 and nums > 0:
+        nums -= 1
+        excess -= 1
 
-    if nums + syms + upps > length:
-        print("\nRequested counts exceed total length; adjusting to fit.")
-        excess = nums + syms + upps - length
-        # reduce uppercase, then symbols, then numbers as needed
-        while excess > 0 and upps > 0:
-            upps -= 1
-            excess -= 1
-        while excess > 0 and syms > 0:
-            syms -= 1
-            excess -= 1
-        while excess > 0 and nums > 0:
-            nums -= 1
-            excess -= 1
-
-    while length != lengthDone:
-        if nums > 0:
-            password.append(rand.choice(numbers))
-            nums -= 1
-        elif syms > 0:
-            password.append(rand.choice(symbols))
-            syms -= 1
-        elif upps > 0:
-            password.append(rand.choice(uppercase))
-            upps -= 1
-        else:
-            password.append(rand.choice(lowercase))
-
-        lengthDone += 1
-        # delay between adding characters
-        time.sleep(0.1)
-        sys.stdout.write(f"\rGenerating password... {lengthDone} Characters Done")
-        sys.stdout.flush()
-
-except (KeyboardInterrupt, EOFError):
-    print("\nOperation cancelled by user.")
-    sys.exit(1)
-except Exception as e:
-    print(f"\nAn error occurred: {e}")
-    sys.exit(1)
+while len(password) < length:
+    if nums > 0:
+        password.append(rand.choice(numbers))
+        nums -= 1
+    elif syms > 0:
+        password.append(rand.choice(symbols))
+        syms -= 1
+    elif upps > 0:
+        password.append(rand.choice(uppercase))
+        upps -= 1
+    else:
+        password.append(rand.choice(lowercase))
 
 rand.shuffle(password)
-finalPassword = "".join(password)
-print(f"\nYour generated password is:\n{finalPassword}")
+print("".join(password))
