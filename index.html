@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python ITS Certification Exam - 100 Questions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .exam-controls {
+            padding: 20px;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-submit {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-reset {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .btn-reset:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+        }
+        
+        .btn-show-answers {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-show-answers:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #ddd;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #667eea;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .exam-content {
+            padding: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .question:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: #1f2937;
+            font-weight: 500;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+        
+        .option input[type="radio"] {
+            margin-right: 12px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .option input[type="radio"]:checked + label {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            margin: 0;
+        }
+        
+        .correct-answer {
+            background: #d1fae5 !important;
+            border-color: #10b981 !important;
+        }
+        
+        .correct-answer::after {
+            content: "✓ CORRECT";
+            color: #10b981;
+            font-weight: bold;
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+        
+        .wrong-answer {
+            background: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        
+        .wrong-answer::after {
+            content: "✗ INCORRECT";
+            color: #ef4444;
+            font-weight: bold;
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+        
+        .user-selected {
+            border-color: #667eea !important;
+            background: #ede9fe !important;
+        }
+        
+        .results {
+            display: none;
+            padding: 30px;
+            text-align: center;
+            background: #f0f9ff;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .score-circle.excellent {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .score-circle.good {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        
+        .score-circle.pass {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .score-circle.fail {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .results h2 {
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+        
+        .results p {
+            font-size: 1.1em;
+            color: #4b5563;
+            margin-bottom: 10px;
+        }
+        
+        .category-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f3f4f6;
+            border-radius: 6px;
+        }
+        
+        .category-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+        
+        .category-stat {
+            font-size: 0.95em;
+            color: #4b5563;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .exam-content {
+                max-height: 60vh;
+            }
+            
+            .exam-controls {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+        
+        /* Scrollbar styling */
+        .exam-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .exam-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .exam-content::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+        
+        .exam-content::-webkit-scrollbar-thumb:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python ITS Certification Exam</h1>
+            <p>100 Questions - Information Technology Specialist</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
+        </div>
+        
+        <div class="exam-controls">
+            <button class="btn-show-answers" onclick="showAnswers()">Show Correct Answers</button>
+            <button class="btn-submit" onclick="submitExam()">Submit Exam</button>
+            <button class="btn-reset" onclick="resetExam()">Reset All</button>
+        </div>
+        
+        <div class="exam-content">
+            <form id="examForm"></form>
+            <div class="results" id="results"></div>
+        </div>
+    </div>
+
+    <script>
+        const examData = [
+            // Python Basics (10 questions)
+            {
+                num: 1,
+                category: "Python Basics",
+                question: "What is the correct way to declare a variable in Python?",
+                options: ["variable: 10", "10 = variable", "variable = 10", "set variable = 10"],
+                correct: 2
+            },
+            {
+                num: 2,
+                category: "Python Basics",
+                question: "Which of the following is NOT a valid data type in Python?",
+                options: ["int", "string", "boolean", "character"],
+                correct: 3
+            },
+            {
+                num: 3,
+                category: "Python Basics",
+                question: "What will print(type(5.5)) output?",
+                options: ["<class 'int'>", "<class 'float'>", "<class 'string'>", "<class 'number'>"],
+                correct: 1
+            },
+            {
+                num: 4,
+                category: "Python Basics",
+                question: "Which operator is used for exponentiation in Python?",
+                options: ["^", "**", "pow", "exp"],
+                correct: 1
+            },
+            {
+                num: 5,
+                category: "Python Basics",
+                question: "What is the result of 10 // 3 in Python?",
+                options: ["3.33", "3", "4", "3.0"],
+                correct: 1
+            },
+            {
+                num: 6,
+                category: "Python Basics",
+                question: "How do you get user input in Python?",
+                options: ["get()", "input()", "scan()", "read()"],
+                correct: 1
+            },
+            {
+                num: 7,
+                category: "Python Basics",
+                question: "What is the output of print('Hello' + 'World')?",
+                options: ["HelloWorld", "Hello World", "Error", "'Hello' 'World'"],
+                correct: 0
+            },
+            {
+                num: 8,
+                category: "Python Basics",
+                question: "How do you convert a string to an integer?",
+                options: ["str(10)", "int('10')", "integer('10')", "convert('10')"],
+                correct: 1
+            },
+            {
+                num: 9,
+                category: "Python Basics",
+                question: "What does len('Python') return?",
+                options: ["5", "6", "7", "Error"],
+                correct: 1
+            },
+            {
+                num: 10,
+                category: "Python Basics",
+                question: "Which comparison operator checks if two values are NOT equal?",
+                options: ["!=", "<>", "~=", "not="],
+                correct: 0
+            },
+            // Control Structures (15 questions)
+            {
+                num: 11,
+                category: "Control Structures",
+                question: "What is the correct syntax for an if statement in Python?",
+                options: ["if (x > 5):", "if x > 5", "if x > 5:", "if x > 5 then:"],
+                correct: 2
+            },
+            {
+                num: 12,
+                category: "Control Structures",
+                question: "What keyword is used for alternative conditions?",
+                options: ["else if", "elif", "elseif", "else"],
+                correct: 1
+            },
+            {
+                num: 13,
+                category: "Control Structures",
+                question: "How many times will the following loop execute? for i in range(5):",
+                options: ["4 times", "5 times", "6 times", "0 times"],
+                correct: 1
+            },
+            {
+                num: 14,
+                category: "Control Structures",
+                question: "What will the following code print?\nx = 10\nif x > 5:\n    print('yes')\nelse:\n    print('no')",
+                options: ["yes", "no", "Both", "Error"],
+                correct: 0
+            },
+            {
+                num: 15,
+                category: "Control Structures",
+                question: "What does the 'break' statement do?",
+                options: ["Stops the program", "Exits a loop", "Skips an iteration", "Restarts a loop"],
+                correct: 1
+            },
+            {
+                num: 16,
+                category: "Control Structures",
+                question: "What does the 'continue' statement do in a loop?",
+                options: ["Stops the loop", "Skips to the next iteration", "Exits the program", "Pauses execution"],
+                correct: 1
+            },
+            {
+                num: 17,
+                category: "Control Structures",
+                question: "What will range(2, 8, 2) produce?",
+                options: ["[2, 4, 6]", "[2, 4, 6, 8]", "[2, 3, 4, 5, 6, 7]", "[8]"],
+                correct: 0
+            },
+            {
+                num: 18,
+                category: "Control Structures",
+                question: "Which loop executes at least once?",
+                options: ["for loop", "while loop", "Both execute at least once", "Neither guarantees execution"],
+                correct: 3
+            },
+            {
+                num: 19,
+                category: "Control Structures",
+                question: "What is the purpose of the 'pass' statement?",
+                options: ["Skip a line", "Do nothing (placeholder)", "Exit a block", "Continue to next line"],
+                correct: 1
+            },
+            {
+                num: 20,
+                category: "Control Structures",
+                question: "How do you check if x is between 1 and 10?",
+                options: ["1 < x < 10", "1 < x AND x < 10", "if 1 < x < 10:", "Both A and C"],
+                correct: 3
+            },
+            {
+                num: 21,
+                category: "Control Structures",
+                question: "What is a nested loop?",
+                options: ["A loop inside another loop", "Two loops next to each other", "A broken loop", "A paused loop"],
+                correct: 0
+            },
+            {
+                num: 22,
+                category: "Control Structures",
+                question: "What will this print? x = 0\nwhile x < 3:\n    print(x)\n    x += 1",
+                options: ["0 1 2", "1 2 3", "0 1 2 3", "Nothing"],
+                correct: 0
+            },
+            {
+                num: 23,
+                category: "Control Structures",
+                question: "How many times does this execute? for i in range(1, 5):",
+                options: ["4 times", "5 times", "1 time", "0 times"],
+                correct: 0
+            },
+            {
+                num: 24,
+                category: "Control Structures",
+                question: "What is the logical AND operator in Python?",
+                options: ["&", "&&", "and", "AND"],
+                correct: 2
+            },
+            {
+                num: 25,
+                category: "Control Structures",
+                question: "What does 'not True' evaluate to?",
+                options: ["True", "False", "None", "Error"],
+                correct: 1
+            },
+            // Data Structures (20 questions)
+            {
+                num: 26,
+                category: "Data Structures",
+                question: "How do you create a list in Python?",
+                options: ["{1, 2, 3}", "[1, 2, 3]", "(1, 2, 3)", "<1, 2, 3>"],
+                correct: 1
+            },
+            {
+                num: 27,
+                category: "Data Structures",
+                question: "What is the index of the first element in a list?",
+                options: ["1", "0", "-1", "None"],
+                correct: 1
+            },
+            {
+                num: 28,
+                category: "Data Structures",
+                question: "How do you access the last element of a list my_list?",
+                options: ["my_list[0]", "my_list[-1]", "my_list[len]", "my_list.last()"],
+                correct: 1
+            },
+            {
+                num: 29,
+                category: "Data Structures",
+                question: "What is the difference between a list and a tuple?",
+                options: ["Lists are mutable, tuples are immutable", "Tuples are mutable, lists are immutable", "No difference", "Lists use [], tuples use ()"],
+                correct: 0
+            },
+            {
+                num: 30,
+                category: "Data Structures",
+                question: "How do you add an element to a list?",
+                options: ["list.add(item)", "list.append(item)", "list.insert(item)", "list.push(item)"],
+                correct: 1
+            },
+            {
+                num: 31,
+                category: "Data Structures",
+                question: "What will len([1, 2, 3, 4]) return?",
+                options: ["3", "4", "5", "None"],
+                correct: 1
+            },
+            {
+                num: 32,
+                category: "Data Structures",
+                question: "How do you remove an element from a list?",
+                options: ["list.remove(item)", "list.delete(item)", "del list[item]", "list.pop(item)"],
+                correct: 0
+            },
+            {
+                num: 33,
+                category: "Data Structures",
+                question: "What does slicing mean in Python?",
+                options: ["Breaking a list", "Accessing a portion of a sequence", "Removing elements", "Sorting elements"],
+                correct: 1
+            },
+            {
+                num: 34,
+                category: "Data Structures",
+                question: "What will my_list[1:3] return from [0, 1, 2, 3, 4]?",
+                options: ["[1, 2]", "[1, 2, 3]", "[0, 1]", "[3, 4]"],
+                correct: 0
+            },
+            {
+                num: 35,
+                category: "Data Structures",
+                question: "How do you create a dictionary in Python?",
+                options: ["[key: value]", "{key: value}", "(key: value)", "<key: value>"],
+                correct: 1
+            },
+            {
+                num: 36,
+                category: "Data Structures",
+                question: "How do you access a value in a dictionary?",
+                options: ["dict.key", "dict[key]", "dict.get(key)", "Both B and C"],
+                correct: 3
+            },
+            {
+                num: 37,
+                category: "Data Structures",
+                question: "What is a set in Python?",
+                options: ["An ordered collection with duplicates", "An unordered collection without duplicates", "A collection of key-value pairs", "A collection of tuples"],
+                correct: 1
+            },
+            {
+                num: 38,
+                category: "Data Structures",
+                question: "How do you create a set?",
+                options: ["{1, 2, 3}", "[1, 2, 3]", "(1, 2, 3)", "set(1, 2, 3)"],
+                correct: 0
+            },
+            {
+                num: 39,
+                category: "Data Structures",
+                question: "What does list comprehension do?",
+                options: ["Creates a list using a loop in one line", "Compresses a list", "Compares lists", "Completes a list"],
+                correct: 0
+            },
+            {
+                num: 40,
+                category: "Data Structures",
+                question: "What will [x*2 for x in [1, 2, 3]] produce?",
+                options: ["[1, 4, 9]", "[2, 4, 6]", "[1, 2, 3]", "Error"],
+                correct: 1
+            },
+            {
+                num: 41,
+                category: "Data Structures",
+                question: "Can tuples be modified after creation?",
+                options: ["Yes, always", "No, they are immutable", "Only the first element", "Only if created with []"],
+                correct: 1
+            },
+            {
+                num: 42,
+                category: "Data Structures",
+                question: "How do you add a key-value pair to a dictionary?",
+                options: ["dict.add(key, value)", "dict[key] = value", "dict.insert(key, value)", "dict.append(key, value)"],
+                correct: 1
+            },
+            {
+                num: 43,
+                category: "Data Structures",
+                question: "What will 'a' in ['a', 'b', 'c'] return?",
+                options: ["0", "True", "False", "Error"],
+                correct: 1
+            },
+            {
+                num: 44,
+                category: "Data Structures",
+                question: "How do you find the maximum value in a list?",
+                options: ["list.max()", "max(list)", "list.greatest()", "greatest(list)"],
+                correct: 1
+            },
+            {
+                num: 45,
+                category: "Data Structures",
+                question: "What is my_list[::-1]?",
+                options: ["Removes elements", "Reverses the list", "Sorts the list", "Duplicates the list"],
+                correct: 1
+            },
+            // Functions and Modules (15 questions)
+            {
+                num: 46,
+                category: "Functions and Modules",
+                question: "What is the correct syntax to define a function?",
+                options: ["function myFunc():", "def myFunc():", "define myFunc():", "func myFunc():"],
+                correct: 1
+            },
+            {
+                num: 47,
+                category: "Functions and Modules",
+                question: "What does a function return by default if no return statement is given?",
+                options: ["0", "Empty string", "None", "False"],
+                correct: 2
+            },
+            {
+                num: 48,
+                category: "Functions and Modules",
+                question: "What is the scope of a variable defined inside a function?",
+                options: ["Global", "Local", "Both", "Neither"],
+                correct: 1
+            },
+            {
+                num: 49,
+                category: "Functions and Modules",
+                question: "How do you import a module in Python?",
+                options: ["include math", "import math", "load math", "use math"],
+                correct: 1
+            },
+            {
+                num: 50,
+                category: "Functions and Modules",
+                question: "How do you import a specific function from a module?",
+                options: ["import math.sqrt", "from math import sqrt", "import sqrt from math", "load math.sqrt"],
+                correct: 1
+            },
+            {
+                num: 51,
+                category: "Functions and Modules",
+                question: "What is a parameter in a function?",
+                options: ["The value passed to a function", "The name of the function", "The return value", "The function definition"],
+                correct: 0
+            },
+            {
+                num: 52,
+                category: "Functions and Modules",
+                question: "What is a default argument?",
+                options: ["An argument that must be provided", "An argument with a default value", "The first argument", "An optional argument"],
+                correct: 1
+            },
+            {
+                num: 53,
+                category: "Functions and Modules",
+                question: "How do you use keyword arguments?",
+                options: ["func(1, 2, 3)", "func(a=1, b=2)", "func(key='value')", "Both B and C"],
+                correct: 3
+            },
+            {
+                num: 54,
+                category: "Functions and Modules",
+                question: "What does *args allow in a function?",
+                options: ["Named arguments", "Multiple positional arguments", "Keyword arguments", "Optional arguments"],
+                correct: 1
+            },
+            {
+                num: 55,
+                category: "Functions and Modules",
+                question: "What does **kwargs allow in a function?",
+                options: ["Multiple positional arguments", "Keyword arguments", "String arguments", "List arguments"],
+                correct: 1
+            },
+            {
+                num: 56,
+                category: "Functions and Modules",
+                question: "What is a lambda function?",
+                options: ["A multi-line function", "An anonymous function", "A named function", "A recursive function"],
+                correct: 1
+            },
+            {
+                num: 57,
+                category: "Functions and Modules",
+                question: "What is the syntax for a lambda function?",
+                options: ["lambda x: x * 2", "lambda (x) return x * 2", "lambda x = x * 2", "lambda x -> x * 2"],
+                correct: 0
+            },
+            {
+                num: 58,
+                category: "Functions and Modules",
+                question: "What does the map() function do?",
+                options: ["Creates a dictionary", "Applies a function to each item", "Sorts items", "Filters items"],
+                correct: 1
+            },
+            {
+                num: 59,
+                category: "Functions and Modules",
+                question: "What does the filter() function do?",
+                options: ["Applies a function to items", "Returns items that match a condition", "Sorts items", "Removes items"],
+                correct: 1
+            },
+            {
+                num: 60,
+                category: "Functions and Modules",
+                question: "How do you create a module?",
+                options: ["Create a .py file", "Use the module keyword", "Import a library", "Define a class"],
+                correct: 0
+            },
+            // Error Handling (10 questions)
+            {
+                num: 61,
+                category: "Error Handling",
+                question: "What is the basic syntax for error handling?",
+                options: ["try/catch", "try/except", "try/handle", "try/error"],
+                correct: 1
+            },
+            {
+                num: 62,
+                category: "Error Handling",
+                question: "What happens if an error occurs in a try block?",
+                options: ["Program stops", "Code in except block executes", "Code continues", "Nothing"],
+                correct: 1
+            },
+            {
+                num: 63,
+                category: "Error Handling",
+                question: "What is a ValueError?",
+                options: ["Variable not defined", "Value has wrong type", "Value is not assigned", "Function returned wrong value"],
+                correct: 1
+            },
+            {
+                num: 64,
+                category: "Error Handling",
+                question: "What is a ZeroDivisionError?",
+                options: ["Variable equals zero", "Division by zero attempted", "Zero not found", "List has zero elements"],
+                correct: 1
+            },
+            {
+                num: 65,
+                category: "Error Handling",
+                question: "What is an IndexError?",
+                options: ["Wrong index value", "Index out of range", "Index is negative", "Index is string"],
+                correct: 1
+            },
+            {
+                num: 66,
+                category: "Error Handling",
+                question: "What does the finally block do?",
+                options: ["Catches exceptions", "Always executes", "Completes the try block", "Returns a value"],
+                correct: 1
+            },
+            {
+                num: 67,
+                category: "Error Handling",
+                question: "Can you have multiple except blocks?",
+                options: ["No", "Yes, for different exceptions", "Only for the same exception", "Only one except allowed"],
+                correct: 1
+            },
+            {
+                num: 68,
+                category: "Error Handling",
+                question: "What is a TypeError?",
+                options: ["Variable type is wrong", "Operation with incompatible types", "Type not defined", "Type conversion failed"],
+                correct: 1
+            },
+            {
+                num: 69,
+                category: "Error Handling",
+                question: "How do you raise an exception?",
+                options: ["error(message)", "raise Exception(message)", "throw Exception(message)", "raise message"],
+                correct: 1
+            },
+            {
+                num: 70,
+                category: "Error Handling",
+                question: "What is a KeyError?",
+                options: ["Wrong key name", "Dictionary key not found", "Key is invalid type", "Key is duplicated"],
+                correct: 1
+            },
+            // Object-Oriented Programming (15 questions)
+            {
+                num: 71,
+                category: "Object-Oriented Programming",
+                question: "How do you define a class in Python?",
+                options: ["class MyClass:", "Class MyClass:", "class MyClass {}", "create MyClass:"],
+                correct: 0
+            },
+            {
+                num: 72,
+                category: "Object-Oriented Programming",
+                question: "What is a constructor in Python?",
+                options: ["__init__ method", "start() method", "__new__ method", "init() function"],
+                correct: 0
+            },
+            {
+                num: 73,
+                category: "Object-Oriented Programming",
+                question: "What does 'self' represent in a class?",
+                options: ["The class itself", "The current object instance", "A static reference", "The parent class"],
+                correct: 1
+            },
+            {
+                num: 74,
+                category: "Object-Oriented Programming",
+                question: "How do you create an object from a class?",
+                options: ["MyClass.new()", "new MyClass()", "MyClass()", "create MyClass()"],
+                correct: 2
+            },
+            {
+                num: 75,
+                category: "Object-Oriented Programming",
+                question: "What is an attribute?",
+                options: ["A method in a class", "A variable in a class", "A function outside a class", "A property of a function"],
+                correct: 1
+            },
+            {
+                num: 76,
+                category: "Object-Oriented Programming",
+                question: "What is a method?",
+                options: ["A variable in a class", "A function in a class", "A class definition", "An object instance"],
+                correct: 1
+            },
+            {
+                num: 77,
+                category: "Object-Oriented Programming",
+                question: "What is inheritance in OOP?",
+                options: ["Creating multiple classes", "One class inheriting from another", "Creating a copy of a class", "Defining a class inside another"],
+                correct: 1
+            },
+            {
+                num: 78,
+                category: "Object-Oriented Programming",
+                question: "How do you inherit from a class?",
+                options: ["class Child inherit Parent:", "class Child(Parent):", "class Child extends Parent:", "inherit Child Parent"],
+                correct: 1
+            },
+            {
+                num: 79,
+                category: "Object-Oriented Programming",
+                question: "What is a superclass?",
+                options: ["A class with more methods", "A parent class", "A powerful class", "A class with special powers"],
+                correct: 1
+            },
+            {
+                num: 80,
+                category: "Object-Oriented Programming",
+                question: "What is method overriding?",
+                options: ["Calling a method multiple times", "Defining a method with the same name as parent", "Deleting a method", "Creating a new method"],
+                correct: 1
+            },
+            {
+                num: 81,
+                category: "Object-Oriented Programming",
+                question: "What is encapsulation?",
+                options: ["Putting classes in modules", "Bundling data and methods together", "Copying data", "Sharing data globally"],
+                correct: 1
+            },
+            {
+                num: 82,
+                category: "Object-Oriented Programming",
+                question: "What does super() do?",
+                options: ["Creates a new object", "Calls the parent class method", "Stops execution", "Skips a method"],
+                correct: 1
+            },
+            {
+                num: 83,
+                category: "Object-Oriented Programming",
+                question: "What is a class attribute?",
+                options: ["An attribute of an object", "An attribute shared by all instances", "An instance variable", "A private variable"],
+                correct: 1
+            },
+            {
+                num: 84,
+                category: "Object-Oriented Programming",
+                question: "What is polymorphism?",
+                options: ["Having multiple classes", "Objects of different classes responding to the same method", "Multiple inheritance", "Changing class behavior"],
+                correct: 1
+            },
+            {
+                num: 85,
+                category: "Object-Oriented Programming",
+                question: "What is an abstract class?",
+                options: ["A class that cannot be instantiated", "A class for storing data", "A class with no methods", "A class with multiple inheritance"],
+                correct: 0
+            },
+            // File Handling (10 questions)
+            {
+                num: 86,
+                category: "File Handling",
+                question: "How do you open a file in Python?",
+                options: ["file.open('name')", "open('name')", "File('name')", "read('name')"],
+                correct: 1
+            },
+            {
+                num: 87,
+                category: "File Handling",
+                question: "What is the correct mode to read a file?",
+                options: ["'w'", "'r'", "'a'", "'x'"],
+                correct: 1
+            },
+            {
+                num: 88,
+                category: "File Handling",
+                question: "What is the correct mode to write to a file?",
+                options: ["'r'", "'w'", "'a'", "'x'"],
+                correct: 1
+            },
+            {
+                num: 89,
+                category: "File Handling",
+                question: "What does 'a' mode do?",
+                options: ["Reads a file", "Writes to a file", "Appends to a file", "Creates a file"],
+                correct: 2
+            },
+            {
+                num: 90,
+                category: "File Handling",
+                question: "How do you read all lines from a file?",
+                options: ["file.read()", "file.readlines()", "file.getlines()", "file.lines()"],
+                correct: 1
+            },
+            {
+                num: 91,
+                category: "File Handling",
+                question: "How do you close a file?",
+                options: ["file.close()", "close(file)", "file.end()", "file.stop()"],
+                correct: 0
+            },
+            {
+                num: 92,
+                category: "File Handling",
+                question: "What is a with statement used for?",
+                options: ["Conditional execution", "Automatic file handling and closing", "Importing modules", "Defining classes"],
+                correct: 1
+            },
+            {
+                num: 93,
+                category: "File Handling",
+                question: "How do you write a line to a file?",
+                options: ["file.writeline('text')", "file.write('text')", "file.println('text')", "file.add('text')"],
+                correct: 1
+            },
+            {
+                num: 94,
+                category: "File Handling",
+                question: "What happens if you try to open a non-existent file in read mode?",
+                options: ["Returns None", "Creates the file", "Raises FileNotFoundError", "Returns empty string"],
+                correct: 2
+            },
+            {
+                num: 95,
+                category: "File Handling",
+                question: "How do you check if a file exists?",
+                options: ["file.exists()", "os.path.exists(filename)", "check_file(filename)", "file.isfile()"],
+                correct: 1
+            },
+            // General Programming Concepts (5 questions)
+            {
+                num: 96,
+                category: "General Programming Concepts",
+                question: "What is a variable?",
+                options: ["A function", "A container for storing data", "A class", "A module"],
+                correct: 1
+            },
+            {
+                num: 97,
+                category: "General Programming Concepts",
+                question: "What is an algorithm?",
+                options: ["A programming language", "A step-by-step procedure to solve a problem", "A type of data structure", "A function definition"],
+                correct: 1
+            },
+            {
+                num: 98,
+                category: "General Programming Concepts",
+                question: "What is debugging?",
+                options: ["Writing code", "Finding and fixing errors", "Testing code", "Documenting code"],
+                correct: 1
+            },
+            {
+                num: 99,
+                category: "General Programming Concepts",
+                question: "What is a comment in Python?",
+                options: ["A note that executes", "Text that explains code", "A string in code", "A function call"],
+                correct: 1
+            },
+            {
+                num: 100,
+                category: "General Programming Concepts",
+                question: "What is the purpose of indentation in Python?",
+                options: ["For readability only", "To define code blocks", "To separate comments", "To declare variables"],
+                correct: 1
+            }
+        ];
+
+        let answers = {};
+        let showingAnswers = false;
+
+        function generateExam() {
+            const form = document.getElementById('examForm');
+            form.innerHTML = '';
+            
+            examData.forEach(q => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.id = `q${q.num}`;
+                
+                let optionsHTML = '';
+                q.options.forEach((option, index) => {
+                    const optionId = `q${q.num}_opt${index}`;
+                    optionsHTML += `
+                        <div class="option">
+                            <input type="radio" id="${optionId}" name="q${q.num}" value="${index}">
+                            <label for="${optionId}">${String.fromCharCode(65 + index)}) ${option}</label>
+                        </div>
+                    `;
+                });
+                
+                questionDiv.innerHTML = `
+                    <div class="question-number">Question ${q.num} - ${q.category}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">${optionsHTML}</div>
+                `;
+                
+                form.appendChild(questionDiv);
+                
+                // Add event listeners to track answers
+                q.options.forEach((_, index) => {
+                    const input = document.getElementById(`q${q.num}_opt${index}`);
+                    input.addEventListener('change', () => {
+                        answers[q.num] = index;
+                        updateProgress();
+                    });
+                });
+            });
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(answers).length;
+            const total = examData.length;
+            const percentage = (answered / total) * 100;
+            document.getElementById('progressBar').style.width = percentage + '%';
+        }
+
+        function submitExam() {
+            const answered = Object.keys(answers).length;
+            const total = examData.length;
+            
+            if (answered === 0) {
+                alert('Please answer at least one question.');
+                return;
+            }
+            
+            let correct = 0;
+            let categoryScores = {};
+            
+            examData.forEach(q => {
+                const userAnswer = answers[q.num];
+                if (userAnswer !== undefined && userAnswer === q.correct) {
+                    correct++;
+                }
+                
+                if (!categoryScores[q.category]) {
+                    categoryScores[q.category] = { correct: 0, total: 0 };
+                }
+                categoryScores[q.category].total++;
+                if (userAnswer !== undefined && userAnswer === q.correct) {
+                    categoryScores[q.category].correct++;
+                }
+            });
+            
+            const percentage = (correct / total) * 100;
+            let scoreClass = 'excellent';
+            let message = '🎉 Excellent!';
+            
+            if (percentage < 60) {
+                scoreClass = 'fail';
+                message = '❌ Needs Improvement';
+            } else if (percentage < 70) {
+                scoreClass = 'pass';
+                message = '✓ Pass';
+            } else if (percentage < 85) {
+                scoreClass = 'good';
+                message = '😊 Good Job!';
+            }
+            
+            let categoryHTML = '';
+            Object.keys(categoryScores).sort().forEach(category => {
+                const scores = categoryScores[category];
+                const categoryPercent = (scores.correct / scores.total * 100).toFixed(1);
+                categoryHTML += `
+                    <div class="category-section">
+                        <div class="category-title">${category}</div>
+                        <div class="category-stat">${scores.correct}/${scores.total} correct (${categoryPercent}%)</div>
+                    </div>
+                `;
+            });
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <h2>${message}</h2>
+                <div class="score-circle ${scoreClass}">${percentage.toFixed(1)}%</div>
+                <p><strong>Score: ${correct} out of ${total} questions</strong></p>
+                <p>You answered ${answered} out of ${total} questions</p>
+                <div style="margin-top: 20px; text-align: left;">${categoryHTML}</div>
+            `;
+            resultsDiv.classList.add('show');
+            
+            highlightAnswers();
+        }
+
+        function showAnswers() {
+            showingAnswers = !showingAnswers;
+            highlightAnswers();
+            
+            const btn = document.querySelector('.btn-show-answers');
+            btn.textContent = showingAnswers ? 'Hide Correct Answers' : 'Show Correct Answers';
+        }
+
+        function highlightAnswers() {
+            examData.forEach(q => {
+                const questionDiv = document.getElementById(`q${q.num}`);
+                
+                // Remove previous highlighting
+                questionDiv.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('correct-answer', 'wrong-answer', 'user-selected');
+                });
+                
+                q.options.forEach((_, index) => {
+                    const option = questionDiv.querySelector(`[value="${index}"]`);
+                    const optionDiv = option.closest('.option');
+                    
+                    if (showingAnswers || Object.keys(answers).length === examData.length) {
+                        if (index === q.correct) {
+                            optionDiv.classList.add('correct-answer');
+                        } else if (answers[q.num] === index) {
+                            optionDiv.classList.add('wrong-answer');
+                        }
+                    }
+                    
+                    if (answers[q.num] === index) {
+                        optionDiv.classList.add('user-selected');
+                    }
+                });
+            });
+        }
+
+        function resetExam() {
+            if (confirm('Are you sure you want to reset the exam?')) {
+                answers = {};
+                showingAnswers = false;
+                document.getElementById('results').classList.remove('show');
+                document.getElementById('progressBar').style.width = '0%';
+                document.querySelector('.btn-show-answers').textContent = 'Show Correct Answers';
+                generateExam();
+            }
+        }
+
+        // Initialize exam on page load
+        generateExam();
+    </script>
+</body>
+</html>
